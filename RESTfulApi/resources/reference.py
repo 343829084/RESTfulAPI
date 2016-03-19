@@ -10,10 +10,12 @@
     
 """
 from flask.ext.restful import Resource, marshal_with
-from RESTfulApi.common.fields import books_fields, sales_records_fields
-from RESTfulApi.common.parsers import token_parser
-from RESTfulApi.handler.reference import get_books_by_type, rm_ref_book2type
-from RESTfulApi.handler.reference import get_sales_records_by_account, get_sales_records_by_book, get_sales_records_by_vip
+from RESTfulApi.utils.fields import deleted_fields
+from RESTfulApi.utils.parsers import token_parser
+from RESTfulApi.utils.fields.book import books_fields
+from RESTfulApi.utils.fields.sales_record import sales_records_fields
+from RESTfulApi.handler.reference import get_sales_records_by_book, get_sales_records_by_vip
+from RESTfulApi.handler.reference import get_books_by_type, rm_ref_book2type, get_sales_records_by_account
 
 
 class ReferenceBook2Type(Resource):
@@ -23,9 +25,11 @@ class ReferenceBook2Type(Resource):
         books = get_books_by_type(book_type_id, token=token)
         return {'books': books}
 
+    @marshal_with(deleted_fields)
     def delete(self, book_type_id):
         token = token_parser.parse_args().token
-        return rm_ref_book2type(book_type_id, token=token)
+        result = rm_ref_book2type(book_type_id, token=token)
+        return result
 
 
 class ReferenceSaleRecord2Account(Resource):

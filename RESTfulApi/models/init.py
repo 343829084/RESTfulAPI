@@ -13,7 +13,7 @@ from mongoengine import connect
 from werkzeug import security
 from RESTfulApi.models.shop_db import Account
 from RESTfulApi.models.token_db import Token
-from RESTfulApi.common.authority import create_token
+from RESTfulApi.utils.authority import create_token
 
 
 connect('library')

@@ -13,7 +13,7 @@ from mongoengine import Q
 from flask import abort
 from RESTfulApi.models.shop_db import Account
 from RESTfulApi.models.token_db import Token
-from RESTfulApi.common.authority import create_token, is_admin, is_root, is_self, is_stuff
+from RESTfulApi.utils.authority import create_token, is_admin, is_root, is_self, is_stuff
 
 
 def get_accounts(args, token=None):
@@ -55,7 +55,7 @@ def create_account(username, password, confirm, role, nickname, token=None):
             "message": "username has been register"
         }
 
-    if role == '1':
+    if str(role) == '1':
         role = 'admin'
     else:
         role = 'stuff'
@@ -70,6 +70,8 @@ def create_account(username, password, confirm, role, nickname, token=None):
         token=create_token(),
     ).save()
     return {
+        'id': account.id,
+        'success': 1,
         'token': token.token
     }
 
@@ -79,25 +81,49 @@ def rm_account(account_id, token=None):
         return abort(403)
 
     account = Account.objects(id=account_id).first()
+    if account is None:
+        return {'message': 'this account has been deleted'}
     if account.role == 'admin':
         if not is_root(token):
             return abort(403)
-    return account.delete()
+    account.delete()
+    return {'success': 1}
 
 
-def update_account(account_id, nickname, des, token=None):
+def update_account(account_id, nickname, des, old_password, new_password, confirm, token=None):
     if token is None or not (is_admin(token) or is_self(account_id, token)):
         return abort(403)
     account = Account.objects(id=account_id).first()
     if account is None or account.username == 'root':
-        return
+        return abort(403)
     if des is None:
         des = ""
+    password = account.password
+    if new_password or confirm:
+        if new_password == confirm:
+            if Account.check_password(account, old_password):
+                password = Account.create_password(new_password)
+            else:
+                return {
+                    'success': 0,
+                    'message': 'wrong password'
+                }
+        else:
+            return {
+                'success': 0,
+                'message': 'pwd != confirm'
+            }
     account.update(
         nickname=nickname,
         description=des,
+        password=password,
     )
-    return account.save()
+    account.save()
+    return {
+        'success': 1,
+        'id': account_id,
+        'message': 'user\'s profile update successfully!'
+    }
 
 
 def get_account_by_id(account_id, token=None):

@@ -13,8 +13,12 @@ from flask.ext.restful import Resource, request, marshal_with
 
 from RESTfulApi.handler.account import get_accounts, get_all_accounts
 from RESTfulApi.handler.account import create_account, rm_account, update_account, get_account_by_id
-from RESTfulApi.common.parsers import register_parser, account_update_parser, token_parser
-from RESTfulApi.common.fields import account_fields, accounts_fields, token_fields
+
+from RESTfulApi.utils.fields import deleted_fields, pt_fields, pt_fields_with_token
+from RESTfulApi.utils.fields.account import account_detail_fields, accounts_fields
+
+from RESTfulApi.utils.parsers import token_parser
+from RESTfulApi.utils.parsers.account import register_parser, account_update_parser
 
 
 class Accounts(Resource):
@@ -28,7 +32,7 @@ class Accounts(Resource):
             accounts = get_all_accounts(token=token)
         return {'accounts': accounts}
 
-    @marshal_with(token_fields)
+    @marshal_with(pt_fields_with_token)
     def post(self):
         token = token_parser.parse_args().token
         account_args = register_parser.parse_args()
@@ -40,18 +44,21 @@ class Accounts(Resource):
 
 
 class Account(Resource):
-    @marshal_with(account_fields)
+    @marshal_with(account_detail_fields)
     def get(self, account_id):
         token = token_parser.parse_args().token
         return get_account_by_id(account_id, token=token)
 
-    @marshal_with(account_fields)
+    @marshal_with(pt_fields)
     def put(self, account_id):
         token = token_parser.parse_args().token
         account_args = account_update_parser.parse_args()
-        account = update_account(account_id, account_args.nickname, account_args.des, token=token)
-        return account
+        result = update_account(account_id, account_args.nickname, account_args.des, account_args.old_password,
+                                account_args.new_password, account_args.confirm, token=token)
+        return result
 
+    @marshal_with(deleted_fields)
     def delete(self, account_id):
         token = token_parser.parse_args().token
-        return rm_account(account_id, token=token)
+        result = rm_account(account_id, token=token)
+        return result

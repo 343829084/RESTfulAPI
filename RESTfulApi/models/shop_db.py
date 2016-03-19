@@ -21,7 +21,7 @@ __all__ = ['Type', 'Book', 'SalesRecord', 'Vip', 'Account']
 
 class Vip(Document):
     username = StringField(required=True, max_length=5, unique=True)
-    nickname = StringField(required=True, max_length=40, unique=True)
+    nickname = StringField(required=True, max_length=40)
     phone = StringField(max_length=15)
     register_time = DateTimeField(default=datetime.today)
 

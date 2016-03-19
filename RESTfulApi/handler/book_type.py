@@ -12,7 +12,7 @@
 from flask import abort
 from mongoengine import Q, OperationError
 from RESTfulApi.models.shop_db import Type
-from RESTfulApi.common.authority import is_admin, is_stuff
+from RESTfulApi.utils.authority import is_admin, is_stuff
 
 
 def get_all_types(token=None):
@@ -25,15 +25,13 @@ def get_all_types(token=None):
 def create_book_type(name, token=None):
     if token is None or not is_stuff(token):
         return abort(403)
-    book_type = Type(name=name)
-    return book_type.save()
-
-
-def get_book_type_by_id(book_type_id, token=None):
-    if token is None or not is_stuff(token):
-        return abort(403)
-    book_type = Type.objects(id=book_type_id).first()
-    return book_type
+    if Type.objects(name=name).first() is not None:
+        return {'message': 'This type has been exist'}
+    book_type = Type(name=name).save()
+    return {
+        'id': book_type.id,
+        'success': 1,
+    }
 
 
 def get_book_types(args, token=None):
@@ -56,11 +54,10 @@ def rm_book_type(book_type_id, token=None):
         return abort(403)
     book_type = Type.objects(id=book_type_id)
     try:
-        r = book_type.delete()
+        book_type.delete()
     except OperationError:
-        r = {
-            "message": {
-                "error": "please dereference before delete the type."
-            }
+        return {
+            "message": "please dereference before delete the type."
         }
-    return r
+    else:
+        return {'success': 1}

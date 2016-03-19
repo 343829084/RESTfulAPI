@@ -10,9 +10,9 @@
     
 """
 from flask import abort
-from mongoengine import Q
+from mongoengine import Q, NotUniqueError
 from RESTfulApi.models.shop_db import Vip
-from RESTfulApi.common.authority import is_stuff
+from RESTfulApi.utils.authority import is_stuff
 
 
 def get_all_vips(token=None):
@@ -26,23 +26,19 @@ def get_all_vips(token=None):
 def create_vip(username, nickname, phone, token=None):
     if token is None or not is_stuff(token):
         return abort(403)
-
     if phone is None:
         phone = ""
+    if Vip.objects(username=username).first() is not None:
+        return {'message': 'The vip\'s name has been used'}
     vip = Vip(
         username=username,
         nickname=nickname,
         phone=phone,
-    )
-    return vip.save()
-
-
-def get_vip_by_id(vip_id, token=None):
-    if token is None or not is_stuff(token):
-        return abort(403)
-
-    vip = Vip.objects(id=vip_id).first()
-    return vip
+    ).save()
+    return {
+        'id': vip.id,
+        'success': 1,
+    }
 
 
 def get_vips(args, token=None):
@@ -57,8 +53,8 @@ def get_vips(args, token=None):
 def rm_vip(book_id, token=None):
     if token is None or not is_stuff(token):
         return abort(403)
-
     vip = Vip.objects(id=book_id)
-    return vip.delete()
+    vip.delete()
+    return {'success': 1}
 
 

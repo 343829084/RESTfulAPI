@@ -11,7 +11,7 @@
 """
 from flask import abort
 from RESTfulApi.models.shop_db import Type, Book, Account, Vip, SalesRecord
-from RESTfulApi.common.authority import is_admin, is_stuff
+from RESTfulApi.utils.authority import is_admin, is_stuff
 
 
 def get_books_by_type(type_id, token=None):
@@ -31,14 +31,14 @@ def rm_ref_book2type(type_id, token=None):
         if the_type in book.type:
             book.type.remove(the_type)
         book.save()
-    return 1
+    return {'success': 1}
 
 
 def get_sales_records_by_account(account_id, token=None):
     if token is None or not is_stuff(token):
         return abort(403)
     account = Account.objects(id=account_id).first()
-    sales_records = SalesRecord.objects(account=account)
+    sales_records = SalesRecord.objects(seller=account)
     return sales_records
 
 
@@ -54,6 +54,6 @@ def get_sales_records_by_vip(vip_id, token=None):
     if token is None or not is_stuff(token):
         return abort(403)
     vip = Vip.objects(id=vip_id).first()
-    sales_records = SalesRecord.objects(vip=vip)
+    sales_records = SalesRecord.objects(purchaser=vip)
     return sales_records
 

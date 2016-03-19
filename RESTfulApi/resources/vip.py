@@ -11,10 +11,12 @@
 """
 from flask.ext.restful import Resource, request, marshal_with
 
-from RESTfulApi.handler.vip import get_all_vips, create_vip
-from RESTfulApi.handler.vip import get_vip_by_id, get_vips, rm_vip
-from RESTfulApi.common.parsers import vip_parser, token_parser
-from RESTfulApi.common.fields import vip_fields, vips_fields
+from RESTfulApi.handler.vip import get_all_vips, create_vip, get_vips, rm_vip
+
+from RESTfulApi.utils.parsers import token_parser
+from RESTfulApi.utils.parsers.vip import vip_post_parser
+from RESTfulApi.utils.fields import deleted_fields, pt_fields
+from RESTfulApi.utils.fields.vip import vips_fields
 
 
 class Vips(Resource):
@@ -28,25 +30,17 @@ class Vips(Resource):
             vips = get_all_vips(token=token)
         return {'vips': vips}
 
-    @marshal_with(vip_fields)
+    @marshal_with(pt_fields)
     def post(self):
         token = token_parser.parse_args().token
-        vip_args = vip_parser.parse_args()
-        vip = create_vip(vip_args.username, vip_args.nickname, vip_args.phone, token=token)
-        return vip
+        vip_args = vip_post_parser.parse_args()
+        result = create_vip(vip_args.username, vip_args.nickname, vip_args.phone, token=token)
+        return result
 
 
 class Vip(Resource):
-    @marshal_with(vip_fields)
-    def get(self, vip_id):
-        token = token_parser.parse_args().token
-        return get_vip_by_id(vip_id, token=token)
-
+    @marshal_with(deleted_fields)
     def delete(self, vip_id):
-        """
-        :param vip_id:
-        :return: 0失败， 1 成功
-        """
         token = token_parser.parse_args().token
-        return rm_vip(vip_id, token=token)
-
+        result = rm_vip(vip_id, token=token)
+        return result

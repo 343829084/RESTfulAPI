@@ -23,7 +23,7 @@ from RESTfulApi.resources.vip import Vips, Vip
 
 from RESTfulApi.resources.book_type import BookTypes, BookType
 
-from RESTfulApi.resources.sales_record import SalesRecords, SalesRecord
+from RESTfulApi.resources.sales_record import SalesRecords
 
 from RESTfulApi.resources.reference import ReferenceBook2Type, ReferenceSaleRecord2Account
 from RESTfulApi.resources.reference import ReferenceSaleRecord2Book, ReferenceSale2Vip
@@ -46,7 +46,6 @@ api.add_resource(BookTypes, '/types')
 api.add_resource(BookType, '/types/<book_type_id>')
 
 api.add_resource(SalesRecords, '/sales_records')
-api.add_resource(SalesRecord, '/sales_records/<sales_record_id>')
 
 api.add_resource(ReferenceBook2Type, '/references/book2type/<book_type_id>')
 api.add_resource(ReferenceSaleRecord2Account, '/references/record2account/<account_id>')

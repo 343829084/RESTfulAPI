@@ -12,20 +12,20 @@
 from flask.ext.restful import Resource, marshal_with
 
 from RESTfulApi.handler.session import login, logout
-from RESTfulApi.common.parsers import login_parser, token_parser
-from RESTfulApi.common.fields import token_fields
+from RESTfulApi.utils.parsers import token_parser
+from RESTfulApi.utils.parsers.session import login_parser
+from RESTfulApi.utils.fields import deleted_fields, pt_fields_with_token
 
 
 class Session(Resource):
-    @marshal_with(token_fields)
+    @marshal_with(pt_fields_with_token)
     def post(self):
         login_args = login_parser.parse_args()
         result = login(login_args.username, login_args.password)
         return result
 
+    @marshal_with(deleted_fields)
     def delete(self):
         token = token_parser.parse_args().token
-        return logout(token)
-
-
-
+        result = logout(token)
+        return result

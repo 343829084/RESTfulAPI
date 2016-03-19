@@ -11,7 +11,7 @@
 """
 from RESTfulApi.models.shop_db import Account
 from RESTfulApi.models.token_db import Token
-from RESTfulApi.common.authority import create_token
+from RESTfulApi.utils.authority import create_token
 
 
 def login(username, password):
@@ -19,15 +19,24 @@ def login(username, password):
     if account is None:
         return {'message': 'this account does not exist'}
     if Account.check_password(account, password):
-        token = Token.objects(user_id=str(account.id))
         new_token = create_token()
-        token.update(token=new_token)
-        return {'token': new_token}
+        token = Token.objects(user_id=str(account.id)).first()
+        if token is None:
+            Token(user_id=str(account.id), token=new_token).save()
+        else:
+            token.update(token=new_token)
+        return {
+            'id': account.id,
+            'success': 1,
+            'token': new_token
+        }
+    else:
+        return {
+            'message': 'password is wrong.'
+        }
 
 
 def logout(token):
     token = Token.objects(token=token).first()
-    if token is None:
-        return 0
-    token.update(token='')
-    return 1
+    token.delete()
+    return {'success': 1}
