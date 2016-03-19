@@ -72,22 +72,29 @@
 `/session` *[登录、注销](#session)*
 
 `/accounts` *[获取用户、新增用户](#accounts)*
+
 `/accounts/<account_id>` *[用户删、改、查](#accounts-1)*
 
 `/books` *[获取图书、新增图书](#books)*
+
 `/books/<book_id>` *[图书删、改、查](#books-1)*
 
 `/vips` *[获取VIP、新增VIP](#vips)*
+
 `/vips/<vip_id>` *[VIP删除](#vips-1)*
 
 `/types` *[获取书种、新增书种](#types)*
+
 `/types/<book_type_id>` *[书种删除](#types-1)*
 
 `/sales_records` *[获取销售记录、添加销售记录](#sales_records)*
 
 `/references/book2type/<book_type_id>` *[解除图书对书种的索引、获取某书种的所有图书](#book2type)*
+
 `/references/record2account/<account_id>` *[获取某用户的售书记录](#record2account)*
+
 `/references/record2book/<book_id>` *[获取某图书的销售记录](#record2book)*
+
 `/references/record2vip/<vip_id>` *[获取某VIP的购买记录](#record2vip)*
 
 
