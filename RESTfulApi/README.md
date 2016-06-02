@@ -72,29 +72,22 @@
 `/session` *[登录、注销](#session)*
 
 `/accounts` *[获取用户、新增用户](#accounts)*
-
 `/accounts/<account_id>` *[用户删、改、查](#accounts-1)*
 
 `/books` *[获取图书、新增图书](#books)*
-
 `/books/<book_id>` *[图书删、改、查](#books-1)*
 
 `/vips` *[获取VIP、新增VIP](#vips)*
-
 `/vips/<vip_id>` *[VIP删除](#vips-1)*
 
 `/types` *[获取书种、新增书种](#types)*
-
 `/types/<book_type_id>` *[书种删除](#types-1)*
 
 `/sales_records` *[获取销售记录、添加销售记录](#sales_records)*
 
 `/references/book2type/<book_type_id>` *[解除图书对书种的索引、获取某书种的所有图书](#book2type)*
-
 `/references/record2account/<account_id>` *[获取某用户的售书记录](#record2account)*
-
 `/references/record2book/<book_id>` *[获取某图书的销售记录](#record2book)*
-
 `/references/record2vip/<vip_id>` *[获取某VIP的购买记录](#record2vip)*
 
 
@@ -153,7 +146,7 @@ token: 0wnCLKVPFG5x2eW8
 ##### form-data
 ```
 username: skyduy
-nickname: 于俊
+nickname: YuJun
 password: secret
 confirm: secret
 role: 1 (其中0为员工，1为超级管理员)
@@ -171,7 +164,7 @@ role: 1 (其中0为员工，1为超级管理员)
 #### get 获取所有用户
 ##### param(可选，此时表示过滤：nickname或者username)，当有param时：
 ```
-/accounts?username=skyduy&&nickname=于俊
+/accounts?username=skyduy&&nickname=YuJun
 ```
 ##### response(get /accounts)
 ```
@@ -179,17 +172,17 @@ role: 1 (其中0为员工，1为超级管理员)
   "accounts": [
     {
       "id": "56ed05cb159ce12c74a634f5",
-      "nickname": "于俊",
+      "nickname": "YuJun",
       "role": "stuff"
     },
     {
       "id": "56ed073d159ce12b0c442de8",
-      "nickname": "杨靖",
+      "nickname": "张三",
       "role": "stuff"
     },
     {
       "id": "56ed0805159ce100546b669e",
-      "nickname": "杨靖",
+      "nickname": "张三",
       "role": "admin"
     }
   ]
@@ -204,7 +197,7 @@ role: 1 (其中0为员工，1为超级管理员)
   "created": "Sat, 19 Mar 2016 16:04:21 -0000",
   "description": "",
   "id": "56ed0805159ce100546b669e",
-  "nickname": "杨靖",
+  "nickname": "张三",
   "role": "admin",
   "username": "yangjing1"
 }
@@ -214,7 +207,7 @@ role: 1 (其中0为员工，1为超级管理员)
 #### put 查看用户详情信息
 ##### form-data
 ```
-nickname: '员工of杨靖'
+nickname: '员工of张三'
 new_password: 2 （填写该框表示要修改密码，可选）
 confirm: 2 （填写该框表示要修改密码，可选）
 old_password: 1 （填写该框表示要修改密码，可选）
@@ -284,7 +277,7 @@ des: 可为空
 ##### response(get /books/56ed0c66159ce147ec4131dd)
 ```
 {
-  "description": "杨靖喜欢的故事",
+  "description": "张三喜欢的故事",
   "id": "56ed0c66159ce147ec4131dd",
   "name": "金瓶梅",
   "price": 58,
@@ -298,7 +291,7 @@ des: 可为空
 ```
 delta: -20
 price: 100
-des = '杨靖超级喜欢的故事，被他买掉了20本，因此升价为100元'(可选)
+des = '张三超级喜欢的故事，被他买掉了20本，因此升价为100元'(可选)
 type_id = 'type_id1'（根据种类id添加一个种类，若不存在id忽略）
 type_id = 'type_id2'（表示一次性添加两个种类）
 ```
@@ -457,7 +450,7 @@ purchaser_id:56ed0ed7159ce1266c62acaf (可选)
       "sale_time": "Sat, 19 Mar 2016 16:42:25 -0000",
       "seller": {
         "id": "56ed05cb159ce12c74a634f5",
-        "nickname": "于俊",
+        "nickname": "YuJun",
         "role": "stuff"
       }
     },
@@ -480,7 +473,7 @@ purchaser_id:56ed0ed7159ce1266c62acaf (可选)
       "sale_time": "Sat, 19 Mar 2016 16:45:38 -0000",
       "seller": {
         "id": "56ed05cb159ce12c74a634f5",
-        "nickname": "于俊",
+        "nickname": "YuJun",
         "role": "stuff"
       }
     }
@@ -539,7 +532,7 @@ purchaser_id:56ed0ed7159ce1266c62acaf (可选)
       "sale_time": "Sat, 19 Mar 2016 16:42:25 -0000",
       "seller": {
         "id": "56ed05cb159ce12c74a634f5",
-        "nickname": "于俊",
+        "nickname": "YuJun",
         "role": "stuff"
       }
     },
@@ -562,7 +555,7 @@ purchaser_id:56ed0ed7159ce1266c62acaf (可选)
       "sale_time": "Sat, 19 Mar 2016 16:45:38 -0000",
       "seller": {
         "id": "56ed05cb159ce12c74a634f5",
-        "nickname": "于俊",
+        "nickname": "YuJun",
         "role": "stuff"
       }
     }
@@ -596,7 +589,7 @@ purchaser_id:56ed0ed7159ce1266c62acaf (可选)
       "sale_time": "Sat, 19 Mar 2016 16:42:25 -0000",
       "seller": {
         "id": "56ed05cb159ce12c74a634f5",
-        "nickname": "于俊",
+        "nickname": "YuJun",
         "role": "stuff"
       }
     },
@@ -619,7 +612,7 @@ purchaser_id:56ed0ed7159ce1266c62acaf (可选)
       "sale_time": "Sat, 19 Mar 2016 16:45:38 -0000",
       "seller": {
         "id": "56ed05cb159ce12c74a634f5",
-        "nickname": "于俊",
+        "nickname": "YuJun",
         "role": "stuff"
       }
     }
@@ -653,7 +646,7 @@ purchaser_id:56ed0ed7159ce1266c62acaf (可选)
       "sale_time": "Sat, 19 Mar 2016 16:42:25 -0000",
       "seller": {
         "id": "56ed05cb159ce12c74a634f5",
-        "nickname": "于俊",
+        "nickname": "YuJun",
         "role": "stuff"
       }
     }
