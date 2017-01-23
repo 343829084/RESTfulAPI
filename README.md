@@ -1,8 +1,5 @@
-# bookshop-RESTfulAPI
-RESTful bookshop manager API
+# RESTfulAPI
+flask-restful 实例。
 
+以mongodb作为数据库。
 
-API接口在RESTfulApi目录下。
-
-
-注：因使用mongoengine，不支持事务。
